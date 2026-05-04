@@ -68,7 +68,7 @@ router.put('/:id/status', async (req, res) => {
     const delivery = deliveries.find(d => d.delivery_id === Number(req.params.id));
     if (!delivery) return res.status(404).json({ success: false, error: 'Delivery not found' });
 
-    const { delivery_status, courier_name, tracking_number, assigned_to } = req.body;
+    const { delivery_status, courier_name, tracking_number } = req.body;
     const validStatuses = ['Pending', 'Packed', 'Shipped', 'Out for Delivery', 'Delivered'];
 
     if (delivery_status) {
@@ -88,7 +88,6 @@ router.put('/:id/status', async (req, res) => {
 
     if (courier_name !== undefined) delivery.courier_name = courier_name;
     if (tracking_number !== undefined) delivery.tracking_number = tracking_number;
-    if (assigned_to !== undefined) delivery.assigned_to = assigned_to;
 
     await ActivityLog.create({
       user_id: req.body.admin_id || 0,
@@ -116,11 +115,9 @@ router.put('/:id/assign', async (req, res) => {
     const delivery = deliveries.find(d => d.delivery_id === Number(req.params.id));
     if (!delivery) return res.status(404).json({ success: false, error: 'Delivery not found' });
 
-    const { courier_name, tracking_number, assigned_to, staff_name } = req.body;
+    const { courier_name, tracking_number } = req.body;
     if (courier_name) delivery.courier_name = courier_name;
     if (tracking_number) delivery.tracking_number = tracking_number;
-    if (assigned_to !== undefined) delivery.assigned_to = assigned_to;
-    if (staff_name !== undefined) delivery.staff_name = staff_name;
 
     // Auto-advance status from Pending to Packed when assigned
     if (delivery.delivery_status === 'Pending' && courier_name) {
@@ -133,7 +130,7 @@ router.put('/:id/assign', async (req, res) => {
       user_id: req.body.admin_id || 0,
       role: 'admin',
       action: 'ASSIGN_COURIER',
-      details: { delivery_id: delivery.delivery_id, courier_name, tracking_number, assigned_to },
+      details: { delivery_id: delivery.delivery_id, courier_name, tracking_number },
       status: 'SUCCESS',
     });
 

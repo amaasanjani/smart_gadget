@@ -51,7 +51,6 @@ export default function Footer() {
           </div>
         </div>
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: 24, textAlign: 'center' }}>
-          <p className="text-muted text-sm">© 2026 Smart Gadget Marketplace. Built with React + Node.js + Oracle + MongoDB.</p>
         </div>
       </div>
     </footer>

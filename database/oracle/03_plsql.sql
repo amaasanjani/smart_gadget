@@ -1,4 +1,4 @@
--- Adds a product and validates seller and category
+-- Adds a product and validates seller & category
 CREATE OR REPLACE PROCEDURE add_new_product (
     p_seller_id     IN products.seller_id%TYPE,
     p_name          IN products.product_name%TYPE,
@@ -26,20 +26,20 @@ BEGIN
     VALUES (p_product_id, p_seller_id, p_name, p_category, p_price, p_stock, p_description);
 
     COMMIT;
-    DBMS_OUTPUT.PUT_LINE(' Product added: ' || p_name || ' (ID: ' || p_product_id || ')');
+    DBMS_OUTPUT.PUT_LINE('✅ Product added: ' || p_name || ' (ID: ' || p_product_id || ')');
 
 EXCEPTION
     WHEN e_invalid_seller THEN
-        DBMS_OUTPUT.PUT_LINE(' ERROR: Seller ID ' || p_seller_id || ' does not exist.');
+        DBMS_OUTPUT.PUT_LINE('❌ ERROR: Seller ID ' || p_seller_id || ' does not exist.');
         RAISE;
     WHEN e_not_verified THEN
-        DBMS_OUTPUT.PUT_LINE(' ERROR: Seller not verified. Cannot add products.');
+        DBMS_OUTPUT.PUT_LINE('❌ ERROR: Seller not verified. Cannot add products.');
         RAISE;
     WHEN VALUE_ERROR THEN
-        DBMS_OUTPUT.PUT_LINE(' ERROR: Invalid data type provided.');
+        DBMS_OUTPUT.PUT_LINE('❌ ERROR: Invalid data type provided.');
         RAISE;
     WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE(' ERROR: ' || SQLERRM);
+        DBMS_OUTPUT.PUT_LINE('❌ ERROR: ' || SQLERRM);
         ROLLBACK;
         RAISE;
 END add_new_product;
@@ -71,16 +71,16 @@ BEGIN
 
     p_status := 'Completed';
     COMMIT;
-    DBMS_OUTPUT.PUT_LINE(' Payment processed: Rs. ' || v_amount || ' via ' || p_method);
+    DBMS_OUTPUT.PUT_LINE('✅ Payment processed: Rs. ' || v_amount || ' via ' || p_method);
 
 EXCEPTION
     WHEN e_order_missing THEN
         p_status := 'Failed';
-        DBMS_OUTPUT.PUT_LINE(' Order ' || p_order_id || ' not found.');
+        DBMS_OUTPUT.PUT_LINE('❌ Order ' || p_order_id || ' not found.');
         RAISE;
     WHEN OTHERS THEN
         p_status := 'Failed';
-        DBMS_OUTPUT.PUT_LINE(' Payment error: ' || SQLERRM);
+        DBMS_OUTPUT.PUT_LINE('❌ Payment error: ' || SQLERRM);
         ROLLBACK;
         RAISE;
 END process_payment;
@@ -126,17 +126,17 @@ BEGIN
     VALUES (v_delivery_id, p_order_id, 'Pending');
 
     COMMIT;
-    DBMS_OUTPUT.PUT_LINE(' Order #' || p_order_id || ' placed. Total: Rs. ' || v_total);
+    DBMS_OUTPUT.PUT_LINE('✅ Order #' || p_order_id || ' placed. Total: Rs. ' || v_total);
 
 EXCEPTION
     WHEN e_out_of_stock THEN
-        DBMS_OUTPUT.PUT_LINE(' Product ' || p_product_id || ' is out of stock! Available: ' || v_stock);
+        DBMS_OUTPUT.PUT_LINE('❌ Product ' || p_product_id || ' is out of stock! Available: ' || v_stock);
         RAISE;
     WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE(' Product not found.');
+        DBMS_OUTPUT.PUT_LINE('❌ Product not found.');
         RAISE;
     WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE(' Order error: ' || SQLERRM);
+        DBMS_OUTPUT.PUT_LINE('❌ Order error: ' || SQLERRM);
         ROLLBACK;
         RAISE;
 END place_order;
@@ -164,7 +164,7 @@ EXCEPTION
 END calculate_total_revenue;
 /
 
--- Returns the product_name of the best-selling product
+-- Returns the product name of the best selling product
 CREATE OR REPLACE FUNCTION get_top_selling_product RETURN VARCHAR2 AS
     v_product_name products.product_name%TYPE;
 BEGIN
@@ -193,7 +193,7 @@ EXCEPTION
 END;
 /
 
--- After an order item is inserted, auto-update product stock
+-- Auto-update product stock
 CREATE OR REPLACE TRIGGER trg_auto_update_stock
 AFTER INSERT ON order_items
 FOR EACH ROW
@@ -203,7 +203,7 @@ BEGIN
         sold = sold + :NEW.quantity
     WHERE product_id = :NEW.product_id;
 
-    DBMS_OUTPUT.PUT_LINE(' Stock updated for product ' || :NEW.product_id);
+    DBMS_OUTPUT.PUT_LINE('📦 Stock updated for product ' || :NEW.product_id);
 END;
 /
 
@@ -215,7 +215,7 @@ WHEN (NEW.payment_status = 'Failed')
 BEGIN
     -- Revert order to Pending if payment failed
     UPDATE orders SET status = 'Pending' WHERE order_id = :NEW.order_id;
-    DBMS_OUTPUT.PUT_LINE(' TRIGGER: Payment failed for order ' || :NEW.order_id || '. Order reset to Pending.');
+    DBMS_OUTPUT.PUT_LINE('⚠️ TRIGGER: Payment failed for order ' || :NEW.order_id || '. Order reset to Pending.');
 END;
 /
 
@@ -283,7 +283,7 @@ BEGIN
 END;
 /
 
--- Test: Product out of stock exception
+-- Testing Product out of stock exception
 DECLARE
     v_order_id NUMBER;
 BEGIN
@@ -295,7 +295,7 @@ EXCEPTION
 END;
 /
 
--- Test: Duplicate seller exception
+-- Testing Duplicate seller exception
 BEGIN
     INSERT INTO sellers VALUES (99,'Duplicate Store','Test','techzone@example.com','0000000','Addr','N',0,'hash',SYSDATE);
 EXCEPTION
@@ -304,17 +304,17 @@ EXCEPTION
 END;
 /
 
--- Test: Function demos
+-- Testing Functions
 BEGIN
     DBMS_OUTPUT.PUT_LINE('Total Revenue: Rs. ' || calculate_total_revenue());
     DBMS_OUTPUT.PUT_LINE('Jan-Mar Revenue: Rs. ' ||
         calculate_total_revenue(TO_DATE('2026-01-01','YYYY-MM-DD'), TO_DATE('2026-03-31','YYYY-MM-DD')));
     DBMS_OUTPUT.PUT_LINE('Top Product: ' || get_top_selling_product());
-    DBMS_OUTPUT.PUT_LINE('Kasun Orders: ' || get_customer_order_count(1));
+    DBMS_OUTPUT.PUT_LINE('Alice Orders: ' || get_customer_order_count(1));
 END;
 /
 
--- 
+-- Reports
 SELECT p.product_name, p.category, SUM(oi.quantity) AS qty_sold,
        SUM(oi.subtotal) AS revenue_generated
 FROM order_items oi
@@ -322,12 +322,12 @@ JOIN products p ON oi.product_id = p.product_id
 GROUP BY p.product_name, p.category
 ORDER BY revenue_generated DESC;
 
--- 
+-- Payment method summary
 SELECT payment_method, COUNT(*) AS transactions, SUM(amount) AS total
 FROM payments WHERE payment_status = 'Completed'
 GROUP BY payment_method ORDER BY total DESC;
 
--- low stock alert
+-- Low stock alert
 SELECT product_id, product_name, category, stock_quantity
 FROM products WHERE stock_quantity <= 5
 ORDER BY stock_quantity;
@@ -340,4 +340,3 @@ SELECT c.name, COUNT(o.order_id) AS orders, SUM(o.total_amount) AS spent
 FROM customers c LEFT JOIN orders o ON c.customer_id = o.customer_id
 GROUP BY c.name ORDER BY spent DESC NULLS LAST;
 
-PROMPT All PL/SQL objects created and tested successfully!

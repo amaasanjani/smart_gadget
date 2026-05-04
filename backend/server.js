@@ -46,7 +46,7 @@ app.use('/api/orders', require('./routes/orders'));
 app.use('/api/payments', require('./routes/payments'));
 app.use('/api/deliveries', require('./routes/deliveries'));
 app.use('/api/categories', require('./routes/categories'));
-app.use('/api/delivery-staff', require('./routes/deliveryStaff').router);
+
 app.use('/api/admins', require('./routes/admins').router);
 app.use('/api/logs', require('./routes/logs'));
 
@@ -78,10 +78,10 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`\n🚀 Smart Gadget Marketplace API running on http://localhost:${PORT}`);
-  console.log(`📦 Admin Login: admin@smartgadget.com / admin123`);
-  console.log(`🛍️  Sample Customer: kasun@example.com / password123`);
-  console.log(`🏪 Sample Seller: techzone@example.com / seller123\n`);
+  console.log(` Smart Gadget Marketplace API running on http://localhost:${PORT}`);
+  console.log(` Admin Login: admin@smartgadget.com / admin123`);
+  console.log(` Sample Customer: kasun@example.com / password123`);
+  console.log(` Sample Seller: techzone@example.com / seller123\n`);
 });
 
 module.exports = app;

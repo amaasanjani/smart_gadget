@@ -158,8 +158,8 @@ export default function Home() {
       {/* cta section */}
       <section className="section">
         <div className="container">
-          <div className="card p-4" style={{ background: 'linear-gradient(135deg, rgba(108,99,255,0.2), rgba(255,101,132,0.1))', textAlign: 'center', border: '1px solid rgba(108,99,255,0.3)' }}>
-            <h2 style={{ marginBottom: 12 }}>Ready to Start Selling? 🚀</h2>
+          <div className="card p-4" style={{ background: 'var(--bg3)', textAlign: 'center' }}>
+            <h2 style={{ marginBottom: 12 }}>Ready to Start Selling?</h2>
             <p className="text-muted" style={{ marginBottom: 28, fontSize: '1rem' }}>Join 500+ verified sellers and reach thousands of gadget lovers.</p>
             <Link to="/register" className="btn btn-primary btn-lg">Register as a Seller</Link>
           </div>

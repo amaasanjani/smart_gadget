@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { customers, sellers } = require('../models/dataStore');
-const { deliveryStaff } = require('./deliveryStaff');
+
 const ActivityLog = require('../models/ActivityLog');
 const jwt = require('jsonwebtoken');
 
@@ -90,9 +90,7 @@ router.post('/login', async (req, res) => {
     } else if (userRole === 'seller') {
       const seller = sellers.find(s => s.email === email && s.password === password);
       if (seller) user = { id: seller.seller_id, name: seller.owner_name, shop: seller.shop_name, email, role: 'seller' };
-    } else if (userRole === 'delivery') {
-      const staff = deliveryStaff.find(s => s.email === email && s.password === password);
-      if (staff) user = { id: staff.staff_id, name: staff.name, email, role: 'delivery' };
+
     } else {
       const customer = customers.find(c => c.email === email && c.password === password);
       if (customer) user = { id: customer.customer_id, name: customer.name, email, role: 'customer' };

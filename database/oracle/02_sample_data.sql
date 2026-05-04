@@ -1,6 +1,4 @@
--- database setup
-
--- CUSTOMERS (10+)
+-- CUSTOMERS
 INSERT INTO customers VALUES (1, 'Kasun Perera',       'kasun@example.com',  '0771234567', '12 Main St, Colombo',       'hash_pw1', TO_DATE('2025-01-10','YYYY-MM-DD'));
 INSERT INTO customers VALUES (2, 'Nuwan Silva',        'nuwan@example.com',  '0777654321', '45 Park Ave, Kandy',        'hash_pw2', TO_DATE('2025-02-14','YYYY-MM-DD'));
 INSERT INTO customers VALUES (3, 'Chamari Fernando',   'chamari@example.com','0712345678', '78 Lake Rd, Galle',         'hash_pw3', TO_DATE('2025-03-01','YYYY-MM-DD'));
@@ -12,14 +10,14 @@ INSERT INTO customers VALUES (8, 'Lahiru Senanayake',  'lahiru@example.com', '07
 INSERT INTO customers VALUES (9, 'Nadeesha Rajapaksha','nadeesha@example.com','0741234567', '67 Lotus St, Polonnaruwa', 'hash_pw9', TO_DATE('2025-05-15','YYYY-MM-DD'));
 INSERT INTO customers VALUES (10,'Ruwan Bandara',      'ruwan@example.com',  '0791234567', '90 Spice Rd, Trincomalee', 'hash_pw10',TO_DATE('2025-06-01','YYYY-MM-DD'));
 
--- SELLERS (5+)
+-- SELLERS
 INSERT INTO sellers VALUES (1,'TechZone LK',   'Nimal Perera',  'techzone@example.com',    '0112345678','100 Tech Park, Colombo 03','Y',4.8,'hash_s1',TO_DATE('2025-01-05','YYYY-MM-DD'));
 INSERT INTO sellers VALUES (2,'GadgetHub',     'Kamal Silva',   'gadgethub@example.com',   '0113456789','200 IT Zone, Colombo 07',  'Y',4.5,'hash_s2',TO_DATE('2025-01-20','YYYY-MM-DD'));
 INSERT INTO sellers VALUES (3,'Digital World', 'Sunil Fernando','digitalworld@example.com','0114567890','300 Mall Rd, Kandy',       'Y',4.7,'hash_s3',TO_DATE('2025-02-10','YYYY-MM-DD'));
 INSERT INTO sellers VALUES (4,'SmartShop',     'Priya Wickrama','smartshop@example.com',   '0115678901','400 Market St, Galle',     'N',4.2,'hash_s4',TO_DATE('2025-03-01','YYYY-MM-DD'));
 INSERT INTO sellers VALUES (5,'ElectroMax',    'Chamara Banda', 'electromax@example.com',  '0116789012','500 Electronic City, Negombo','Y',4.6,'hash_s5',TO_DATE('2025-03-20','YYYY-MM-DD'));
 
--- PRODUCTS (20+)
+-- PRODUCTS
 INSERT INTO products VALUES (1,1,'Samsung Galaxy S25 Ultra','Smartphones',189900,25,'200MP camera, 12GB RAM, 512GB storage','https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=400',4.9,145,SYSDATE);
 INSERT INTO products VALUES (2,1,'Apple iPhone 16 Pro','Smartphones',245000,18,'A18 Pro chip, 48MP camera, titanium design','https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400',4.8,189,SYSDATE);
 INSERT INTO products VALUES (3,2,'MacBook Pro 14" M4','Laptops',389000,12,'Apple M4 chip, 16GB unified memory, Liquid Retina XDR','https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400',4.9,67,SYSDATE);
@@ -41,7 +39,7 @@ INSERT INTO products VALUES (18,3,'Xiaomi Smart Band 9 Pro','Smart Watches',8500
 INSERT INTO products VALUES (19,4,'JBL Tune 770NC','Headphones',19500,70,'Adaptive ANC, 70hr battery, hands-free calls','https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400',4.5,198,SYSDATE);
 INSERT INTO products VALUES (20,5,'Samsung 65" QLED 4K TV','Accessories',325000,3,'Quantum Dot, 144Hz, 4K AI Upscaling, Smart TV','https://images.unsplash.com/photo-1593359677879-a4bb92f4834a?w=400',4.8,22,SYSDATE);
 
--- ORDERS (15+)
+-- ORDERS
 INSERT INTO orders VALUES (1, 1,TO_DATE('2026-01-15','YYYY-MM-DD'),245000,'Delivered');
 INSERT INTO orders VALUES (2, 2,TO_DATE('2026-01-20','YYYY-MM-DD'),73500,'Delivered');
 INSERT INTO orders VALUES (3, 3,TO_DATE('2026-02-05','YYYY-MM-DD'),389000,'Shipped');
@@ -106,4 +104,3 @@ INSERT INTO deliveries VALUES (9, 9,'Delivered',     'Courier Lanka','CLK009',TO
 INSERT INTO deliveries VALUES (10,10,'Delivered',    'DHL Express',  'DHL010',TO_DATE('2026-03-22','YYYY-MM-DD'));
 
 COMMIT;
-PROMPT Sample data inserted: 10 customers, 5 sellers, 20 products, 15 orders, 15 payments, 10 deliveries

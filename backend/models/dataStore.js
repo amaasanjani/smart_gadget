@@ -31,7 +31,7 @@ const products = [
   { product_id: 5, seller_id: 3, product_name: 'Apple Watch Ultra 2', category: 'Smart Watches', price: 125000, stock_quantity: 30, description: '49mm titanium case, GPS precision, 60hr battery', image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400', rating: 4.8, sold: 98 },
   { product_id: 6, seller_id: 3, product_name: 'Samsung Galaxy Watch 7', category: 'Smart Watches', price: 65000, stock_quantity: 40, description: 'Advanced health sensors, 3nm chip, sleep coaching', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400', rating: 4.6, sold: 112 },
   { product_id: 7, seller_id: 4, product_name: 'Sony WH-1000XM6', category: 'Headphones', price: 55000, stock_quantity: 50, description: 'Industry-leading ANC, 30hr battery, Hi-Res Audio', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400', rating: 4.9, sold: 234 },
-  { product_id: 8, seller_id: 4, product_name: 'Apple AirPods Pro 3', category: 'Headphones', price: 48000, stock_quantity: 60, description: 'H3 chip, adaptive transparency, USB-C case', image: 'https://images.unsplash.com/photo-1588156979435-379b9d802b0a?w=400', rating: 4.7, sold: 178 },
+  { product_id: 8, seller_id: 4, product_name: 'Apple AirPods Pro 3', category: 'Headphones', price: 48000, stock_quantity: 60, description: 'H3 chip, adaptive transparency, USB-C case', image: 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?w=400', rating: 4.7, sold: 178 },
   { product_id: 9, seller_id: 5, product_name: 'iPad Pro 13" M4', category: 'Tablets', price: 215000, stock_quantity: 15, description: 'Ultra Retina XDR OLED, M4 chip, 2TB storage', image: 'https://images.unsplash.com/photo-1561154464-82e9adf32764?w=400', rating: 4.8, sold: 56 },
   { product_id: 10, seller_id: 5, product_name: 'Logitech MX Master 3S', category: 'Accessories', price: 18500, stock_quantity: 100, description: 'Electromagnetic scroll, 8K DPI, silent clicks', image: 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=400', rating: 4.8, sold: 320 },
   { product_id: 11, seller_id: 1, product_name: 'Google Pixel 9 Pro', category: 'Smartphones', price: 165000, stock_quantity: 20, description: 'Tensor G4, 50MP camera, 7yr updates, AI features', image: 'https://images.unsplash.com/photo-1598300056393-4aac492f4344?w=400', rating: 4.6, sold: 87 },
@@ -140,12 +140,6 @@ const categories = [
   { category_id: 7, name: 'Other', description: 'Other electronic gadgets', active: true, created_at: '2025-01-01', image: '🔌' },
 ];
 
-const deliveryStaff = [
-  { staff_id: 1, name: 'Ravi Kumar', email: 'ravi@delivery.com', phone: '0771111111', password: 'staff123', status: 'Active', assigned_count: 3 },
-  { staff_id: 2, name: 'Saman Perera', email: 'saman@delivery.com', phone: '0772222222', password: 'staff123', status: 'Active', assigned_count: 2 },
-  { staff_id: 3, name: 'Nimal De Silva', email: 'nimal@delivery.com', phone: '0773333333', password: 'staff123', status: 'Active', assigned_count: 1 },
-];
-
 const dataFilePath = path.join(__dirname, 'database.json');
 
 if (fs.existsSync(dataFilePath)) {
@@ -160,24 +154,24 @@ if (fs.existsSync(dataFilePath)) {
     if (fileData.deliveries) { deliveries.length = 0; deliveries.push(...fileData.deliveries); }
     if (fileData.admins) { admins.length = 0; admins.push(...fileData.admins); }
     if (fileData.categories) { categories.length = 0; categories.push(...fileData.categories); }
-    if (fileData.deliveryStaff) { deliveryStaff.length = 0; deliveryStaff.push(...fileData.deliveryStaff); }
   } catch (err) {
     console.error('Failed to read database.json', err);
   }
 } else {
-  fs.writeFileSync(dataFilePath, JSON.stringify({ customers, sellers, products, orders, order_items, payments, deliveries, admins, categories, deliveryStaff }, null, 2));
+  fs.writeFileSync(dataFilePath, JSON.stringify({ customers, sellers, products, orders, order_items, payments, deliveries, admins, categories }, null, 2));
 }
 
-let lastState = JSON.stringify({ customers, sellers, products, orders, order_items, payments, deliveries, admins, categories, deliveryStaff });
+let lastState = JSON.stringify({ customers, sellers, products, orders, order_items, payments, deliveries, admins, categories });
 
 setInterval(() => {
-  const currentState = JSON.stringify({ customers, sellers, products, orders, order_items, payments, deliveries, admins, categories, deliveryStaff });
+  const dataObj = { customers, sellers, products, orders, order_items, payments, deliveries, admins, categories };
+  const currentState = JSON.stringify(dataObj);
   if (currentState !== lastState) {
-    fs.writeFile(dataFilePath, currentState, (err) => {
+    fs.writeFile(dataFilePath, JSON.stringify(dataObj, null, 2), (err) => {
       if (err) console.error('Failed to save database.json', err);
     });
     lastState = currentState;
   }
 }, 1000);
 
-module.exports = { customers, sellers, products, orders, order_items, payments, deliveries, admins, categories, deliveryStaff };
+module.exports = { customers, sellers, products, orders, order_items, payments, deliveries, admins, categories };

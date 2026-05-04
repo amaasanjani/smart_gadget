@@ -108,7 +108,7 @@ export default function SellerDashboard() {
     <div className="container" style={{ padding: '32px 24px' }}>
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h1>🏪 Seller Dashboard</h1>
+          <h1>Seller Dashboard</h1>
           <p className="text-muted text-sm mt-1">{user.name}{user.shop ? ` · ${user.shop}` : ''}</p>
         </div>
         <div className="flex gap-2">

@@ -31,7 +31,6 @@
 - admin - admin@smartgadget.com / admin123
 - seller - techzone@example.com / seller123
 - customer - kasun@example.com / password123
-- delivery - ravi@delivery.com / staff123
 
 # features included
 

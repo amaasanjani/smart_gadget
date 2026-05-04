@@ -75,7 +75,7 @@ export default function CustomerProfile() {
           <div className="flex items-center gap-3">
             <div style={{
               width: 64, height: 64, borderRadius: '50%',
-              background: 'linear-gradient(135deg, var(--accent), var(--accent2))',
+              background: 'var(--accent)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: '1.8rem', color: '#fff', fontWeight: 'bold'
             }}>

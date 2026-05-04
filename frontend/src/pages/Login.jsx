@@ -21,7 +21,6 @@ export default function Login() {
       toast.success(`Welcome back, ${user.name}! 👋`);
       if (user.role === 'admin') navigate('/admin');
       else if (user.role === 'seller') navigate('/seller');
-      else if (user.role === 'delivery') navigate('/delivery');
       else navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.error || 'Login failed');
@@ -38,7 +37,7 @@ export default function Login() {
         <div className="text-center mb-4">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 8 }}>
             <Zap size={28} style={{ color: 'var(--accent)' }} />
-            <span style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '1.5rem' }}>SmartGadget</span>
+            <span style={{ fontFamily: 'Arial, sans-serif', fontWeight: 700, fontSize: '1.5rem' }}>SmartGadget</span>
           </div>
           <h2>Welcome Back</h2>
           <p className="text-muted text-sm mt-1">Sign in to your account</p>
@@ -46,12 +45,10 @@ export default function Login() {
 
         {/* Quick demo logins */}
         <div className="card p-3 mb-3" style={{ background: 'rgba(108,99,255,0.05)' }}>
-          <p className="text-xs text-muted mb-2 text-center">🚀 Quick Demo Login</p>
           <div className="flex gap-1" style={{ flexWrap: 'wrap', justifyContent: 'center' }}>
             <button className="btn btn-secondary btn-sm" onClick={() => quickLogin('kasun@example.com', 'password123', 'customer')}>Customer</button>
             <button className="btn btn-secondary btn-sm" onClick={() => quickLogin('techzone@example.com', 'seller123', 'seller')}>Seller</button>
             <button className="btn btn-secondary btn-sm" onClick={() => quickLogin('admin@smartgadget.com', 'admin123', 'customer')}>Admin</button>
-            <button className="btn btn-secondary btn-sm" onClick={() => quickLogin('ravi@delivery.com', 'staff123', 'delivery')}>Delivery</button>
           </div>
         </div>
 
@@ -60,7 +57,7 @@ export default function Login() {
             <div className="form-group mb-3">
               <label>Login as</label>
               <div className="tabs" style={{ marginBottom: 0 }}>
-                {['customer', 'seller', 'delivery'].map(r => (
+                {['customer', 'seller'].map(r => (
                 <button key={r} type="button" className={`tab ${form.role === r ? 'active' : ''}`}
                   onClick={() => set('role', r)} style={{ flex: 1, textTransform: 'capitalize' }}>{r}</button>
               ))}

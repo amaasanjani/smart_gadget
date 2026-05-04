@@ -1,5 +1,3 @@
--- database setup
-
 -- drop tables
 BEGIN
   FOR t IN (SELECT table_name FROM user_tables WHERE table_name IN
@@ -132,5 +130,3 @@ CREATE OR REPLACE VIEW vw_order_details AS
     LEFT JOIN deliveries d ON o.order_id = d.order_id;
 
 COMMIT;
-
-PROMPT Schema created successfully!

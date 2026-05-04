@@ -14,7 +14,6 @@ import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
 import SellerDashboard from './pages/SellerDashboard';
 import CustomerProfile from './pages/CustomerProfile';
-import DeliveryDashboard from './pages/DeliveryDashboard';
 import CategoryManagement from './pages/CategoryManagement';
 
 const ProtectedRoute = ({ children, roles }) => {
@@ -43,7 +42,6 @@ export default function App() {
           <Route path="/admin" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
           <Route path="/admin/categories" element={<ProtectedRoute roles={['admin']}><CategoryManagement /></ProtectedRoute>} />
           <Route path="/seller" element={<ProtectedRoute roles={['seller']}><SellerDashboard /></ProtectedRoute>} />
-          <Route path="/delivery" element={<ProtectedRoute roles={['delivery']}><DeliveryDashboard /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>

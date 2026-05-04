@@ -29,7 +29,6 @@ export default function Navbar() {
           {user?.role === 'admin' && <Link to="/admin" className={active('/admin')}>Admin</Link>}
           {user?.role === 'admin' && <Link to="/admin/categories" className={active('/admin/categories')}>Categories</Link>}
           {user?.role === 'seller' && <Link to="/seller" className={active('/seller')}>Seller</Link>}
-          {user?.role === 'delivery' && <Link to="/delivery" className={active('/delivery')}>Deliveries</Link>}
           {user && user.role === 'customer' && <Link to="/orders" className={active('/orders')}>My Orders</Link>}
           {user && user.role === 'customer' && <Link to="/profile" className={active('/profile')}>Profile</Link>}
         </div>
@@ -43,7 +42,7 @@ export default function Navbar() {
           {user ? (
             <div className="flex items-center gap-1">
               <span className="text-sm text-muted" style={{ padding: '0 8px' }}>
-                {user.role === 'admin' ? '👑' : user.role === 'seller' ? '🏪' : user.role === 'delivery' ? '🚚' : '👤'} {user.name}
+                {user.role === 'admin' ? '' : user.role === 'seller' ? '' : ''} {user.name}
               </span>
               <button onClick={handleLogout} className="btn btn-secondary btn-sm">
                 <LogOut size={14} /> Logout

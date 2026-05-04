@@ -66,7 +66,7 @@ export default function AdminDashboard() {
     <div className="container" style={{ padding: '32px 24px' }}>
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h1>👑 Admin Dashboard</h1>
+          <h1>Admin Dashboard</h1>
           <p className="text-muted text-sm mt-1">Smart Gadget Marketplace — Management Console</p>
         </div>
         <button className="btn btn-secondary" onClick={fetchAll}><RefreshCw size={14} /> Refresh</button>
@@ -120,7 +120,7 @@ export default function AdminDashboard() {
                     <span>{c.category}</span><span className="text-accent">{fmt(c.revenue)}</span>
                   </div>
                   <div style={{ height: 6, background: 'var(--bg3)', borderRadius: 3 }}>
-                    <div style={{ height: '100%', borderRadius: 3, background: 'linear-gradient(to right, var(--accent), var(--accent2))', width: `${Math.min(100, (c.revenue / Math.max(...(data?.categoryRevenue || []).map(x => x.revenue))) * 100)}%` }} />
+                    <div style={{ height: '100%', borderRadius: 3, background: 'var(--accent)', width: `${Math.min(100, (c.revenue / Math.max(...(data?.categoryRevenue || []).map(x => x.revenue))) * 100)}%` }} />
                   </div>
                 </div>
               ))}
@@ -366,7 +366,7 @@ function SellersTab() {
   return (
     <div className="card p-3">
       <div className="flex justify-between items-center mb-3">
-        <h3>🏪 Seller Management ({sellers.length})</h3>
+        <h3>Seller Management ({sellers.length})</h3>
         <input className="input" style={{ width: 220 }} placeholder="Search sellers…" value={search} onChange={e => setSearch(e.target.value)} />
       </div>
       <div className="table-wrap">
@@ -421,23 +421,18 @@ function SellersTab() {
 
 function DeliveriesTab() {
   const [deliveries, setDeliveries] = useState([]);
-  const [staffList, setStaffList] = useState([]);
   const [selected, setSelected] = useState(null);
-  const [assignForm, setAssignForm] = useState({ courier_name: '', tracking_number: '', delivery_status: '', assigned_to: '' });
+  const [assignForm, setAssignForm] = useState({ courier_name: '', tracking_number: '', delivery_status: '' });
   const [saving, setSaving] = useState(false);
   const [filterStatus, setFilterStatus] = useState('all');
   const statusBadge = { Pending: 'badge-warning', Packed: 'badge-accent', Shipped: 'badge-info', 'Out for Delivery': 'badge-accent', Delivered: 'badge-success' };
-  useEffect(() => { 
-    api.get('/deliveries').then(r => setDeliveries(r.data.data || [])); 
-    api.get('/delivery-staff').then(r => setStaffList(r.data.data || []));
-  }, []);
+  useEffect(() => { api.get('/deliveries').then(r => setDeliveries(r.data.data || [])); }, []);
   const filtered = filterStatus === 'all' ? deliveries : deliveries.filter(d => d.delivery_status === filterStatus);
-  const openManage = (d) => { setSelected(d); setAssignForm({ courier_name: d.courier_name || '', tracking_number: d.tracking_number || '', delivery_status: d.delivery_status, assigned_to: d.assigned_to || '' }); };
+  const openManage = (d) => { setSelected(d); setAssignForm({ courier_name: d.courier_name || '', tracking_number: d.tracking_number || '', delivery_status: d.delivery_status }); };
   const handleSave = async (e) => {
     e.preventDefault(); setSaving(true);
     try {
-      const payload = { ...assignForm, assigned_to: assignForm.assigned_to ? Number(assignForm.assigned_to) : null };
-      const res = await api.put(`/deliveries/${selected.delivery_id}/status`, payload);
+      const res = await api.put(`/deliveries/${selected.delivery_id}/status`, assignForm);
       setDeliveries(p => p.map(d => d.delivery_id === selected.delivery_id ? { ...d, ...res.data.data } : d));
       toast.success('Delivery updated'); setSelected(null);
     } catch (err) { toast.error(err.response?.data?.error || 'Failed'); } finally { setSaving(false); }
@@ -471,9 +466,7 @@ function DeliveriesTab() {
                   <td>#{d.order_id}</td>
                   <td className="text-muted">{d.customer_name || `Customer #${d.order?.customer_id}`}</td>
                   <td><span className={`badge ${statusBadge[d.delivery_status] || 'badge-muted'}`}>{d.delivery_status}</span></td>
-                  <td>
-                    {d.courier_name || (d.assigned_to ? staffList.find(s => s.staff_id === d.assigned_to)?.name || `Staff #${d.assigned_to}` : '—')}
-                  </td>
+                  <td>{d.courier_name || '—'}</td>
                   <td>{d.tracking_number ? <span className="badge badge-accent">{d.tracking_number}</span> : '—'}</td>
                   <td className="text-muted">{d.delivery_date || '—'}</td>
                   <td><button className="btn btn-primary btn-sm" onClick={() => openManage(d)}>Manage</button></td>
@@ -499,13 +492,7 @@ function DeliveriesTab() {
                   {['Pending','Packed','Shipped','Out for Delivery','Delivered'].map(s => <option key={s}>{s}</option>)}
                 </select>
               </div>
-              <div className="form-group mb-3"><label>Assign Internal Staff</label>
-                <select className="select w-full" value={assignForm.assigned_to} onChange={e => setAssignForm(f => ({ ...f, assigned_to: e.target.value }))}>
-                  <option value="">-- None (Third Party Courier) --</option>
-                  {staffList.map(s => <option key={s.staff_id} value={s.staff_id}>{s.name}</option>)}
-                </select>
-              </div>
-              <div className="form-group mb-3"><label>Courier / Company (Optional)</label><input className="input" placeholder="e.g. DHL Express" value={assignForm.courier_name} onChange={e => setAssignForm(f => ({ ...f, courier_name: e.target.value }))} /></div>
+              <div className="form-group mb-3"><label>Courier / Company</label><input className="input" placeholder="e.g. DHL Express" value={assignForm.courier_name} onChange={e => setAssignForm(f => ({ ...f, courier_name: e.target.value }))} /></div>
               <div className="form-group mb-4"><label>Tracking Number</label><input className="input" placeholder="e.g. DHL001234" value={assignForm.tracking_number} onChange={e => setAssignForm(f => ({ ...f, tracking_number: e.target.value }))} /></div>
               <div className="flex gap-2">
                 <button className="btn btn-primary" type="submit" disabled={saving} style={{ flex: 1 }}>{saving ? 'Saving…' : 'Update Delivery'}</button>
@@ -549,7 +536,7 @@ function AdminsTab() {
   return (
     <div className="card p-3">
       <div className="flex justify-between items-center mb-3">
-        <h3>👑 Admin Management ({admins.length})</h3>
+        <h3>Admin Management ({admins.length})</h3>
         <button className="btn btn-primary btn-sm" onClick={openAdd}><Plus size={14} /> Add Admin</button>
       </div>
       <div className="table-wrap">
