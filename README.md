@@ -18,7 +18,7 @@
 
 # start the backend
 - cd backend
-- npm run start
+- npm start
 - port 5000
 
 # start the frontend

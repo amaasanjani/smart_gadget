@@ -294,11 +294,11 @@
       "product_name": "Google Pixel 9 Pro",
       "category": "Smartphones",
       "price": 165000,
-      "stock_quantity": 20,
+      "stock_quantity": 19,
       "description": "Tensor G4, 50MP camera, 7yr updates, AI features",
       "image": "https://images.unsplash.com/photo-1598300056393-4aac492f4344?w=400",
       "rating": 4.6,
-      "sold": 87
+      "sold": 88
     },
     {
       "product_id": 12,
@@ -569,6 +569,13 @@
       "order_date": "2026-05-03",
       "total_amount": 18500,
       "status": "Processing"
+    },
+    {
+      "order_id": 17,
+      "customer_id": 1,
+      "order_date": "2026-05-06",
+      "total_amount": 165000,
+      "status": "Delivered"
     }
   ],
   "order_items": [
@@ -690,6 +697,13 @@
       "product_id": 10,
       "quantity": 1,
       "subtotal": 18500
+    },
+    {
+      "item_id": 18,
+      "order_id": 17,
+      "product_id": 11,
+      "quantity": 1,
+      "subtotal": 165000
     }
   ],
   "payments": [
@@ -820,6 +834,14 @@
       "payment_status": "Completed",
       "payment_date": "2026-05-03",
       "amount": 18500
+    },
+    {
+      "payment_id": 17,
+      "order_id": 17,
+      "payment_method": "Card",
+      "payment_status": "Completed",
+      "payment_date": "2026-05-06",
+      "amount": 165000
     }
   ],
   "deliveries": [
@@ -910,6 +932,14 @@
       "courier_name": null,
       "delivery_date": null,
       "tracking_number": null
+    },
+    {
+      "delivery_id": 12,
+      "order_id": 17,
+      "delivery_status": "Delivered",
+      "courier_name": "Kubiyo",
+      "delivery_date": "2026-05-06",
+      "tracking_number": "22222"
     }
   ],
   "admins": [
@@ -980,35 +1010,6 @@
       "active": true,
       "created_at": "2025-01-01",
       "image": "🔌"
-    }
-  ],
-  "deliveryStaff": [
-    {
-      "staff_id": 1,
-      "name": "Ravi Kumar",
-      "email": "ravi@delivery.com",
-      "phone": "0771111111",
-      "password": "staff123",
-      "status": "Active",
-      "assigned_count": 3
-    },
-    {
-      "staff_id": 2,
-      "name": "Saman Perera",
-      "email": "saman@delivery.com",
-      "phone": "0772222222",
-      "password": "staff123",
-      "status": "Active",
-      "assigned_count": 2
-    },
-    {
-      "staff_id": 3,
-      "name": "Nimal De Silva",
-      "email": "nimal@delivery.com",
-      "phone": "0773333333",
-      "password": "staff123",
-      "status": "Active",
-      "assigned_count": 1
     }
   ]
 }
