@@ -1,0 +1,43 @@
+# ========================
+# Backend .gitignore
+# Node.js + Express + MongoDB
+# ========================
+
+# ── Dependencies ─────────────────────────────────
+node_modules/
+
+# ── Environment / Secrets ────────────────────────
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+
+# ── Uploaded Files (multer) ───────────────────────
+uploads/*
+!uploads/.gitkeep
+
+# ── Logs ─────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ── Database / JSON store ────────────────────────
+models/database.json
+
+# ── OS Files ─────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Editors / IDEs ───────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.sw?
+
+# ── Misc ─────────────────────────────────────────
+coverage/
+*.tgz
