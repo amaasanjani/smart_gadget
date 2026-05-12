@@ -1,34 +1,5 @@
--- ============================================================
--- Drop sequences safely (idempotent – ignores ORA-02289
--- "sequence does not exist" so the script can be re-run)
--- ============================================================
-BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE customers_seq';   EXCEPTION WHEN OTHERS THEN NULL; END;
-/
-BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE sellers_seq';     EXCEPTION WHEN OTHERS THEN NULL; END;
-/
-BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE products_seq';    EXCEPTION WHEN OTHERS THEN NULL; END;
-/
-BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE orders_seq';      EXCEPTION WHEN OTHERS THEN NULL; END;
-/
-BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE order_items_seq'; EXCEPTION WHEN OTHERS THEN NULL; END;
-/
-BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE payments_seq';    EXCEPTION WHEN OTHERS THEN NULL; END;
-/
-BEGIN EXECUTE IMMEDIATE 'DROP SEQUENCE deliveries_seq';  EXCEPTION WHEN OTHERS THEN NULL; END;
-/
-
--- Re-create sequences
-CREATE SEQUENCE customers_seq   START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE sellers_seq     START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE products_seq    START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE orders_seq      START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE order_items_seq START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE payments_seq    START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE deliveries_seq  START WITH 1 INCREMENT BY 1;
-
--- ============================================================
-
 -- Adds a product and validates seller & category
+
 CREATE OR REPLACE PROCEDURE add_new_product (
     p_seller_id     IN products.seller_id%TYPE,
     p_name          IN products.product_name%TYPE,
@@ -75,8 +46,7 @@ EXCEPTION
 END add_new_product;
 /
 
--- Processes payment for an order (procedure) 
-
+-- Processes payment for an order
 CREATE OR REPLACE PROCEDURE process_payment (
     p_order_id       IN  payments.order_id%TYPE,
     p_method         IN  payments.payment_method%TYPE,
@@ -117,7 +87,7 @@ EXCEPTION
 END process_payment;
 /
 
--- Places an order with items, handles stock check (procedure)
+-- Places an order with items, handles stock check
 CREATE OR REPLACE PROCEDURE place_order (
     p_customer_id  IN  orders.customer_id%TYPE,
     p_product_id   IN  products.product_id%TYPE,
@@ -135,7 +105,7 @@ BEGIN
     SELECT price, stock_quantity INTO v_price, v_stock
     FROM products WHERE product_id = p_product_id;
 
-    -- Out of stock
+    -- Out of stock 
     IF v_stock < p_quantity THEN RAISE e_out_of_stock; END IF;
 
     v_total := v_price * p_quantity;
@@ -173,7 +143,7 @@ EXCEPTION
 END place_order;
 /
 
--- Returns total revenue from completed payments (function)
+-- Returns total revenue from completed payments
 CREATE OR REPLACE FUNCTION calculate_total_revenue (
     p_from_date IN DATE DEFAULT NULL,
     p_to_date   IN DATE DEFAULT NULL
@@ -195,7 +165,7 @@ EXCEPTION
 END calculate_total_revenue;
 /
 
--- Returns the product name of the best selling product (function)
+-- Returns the product name of the best selling product
 CREATE OR REPLACE FUNCTION get_top_selling_product RETURN VARCHAR2 AS
     v_product_name products.product_name%TYPE;
 BEGIN
@@ -224,7 +194,7 @@ EXCEPTION
 END;
 /
 
--- Auto-update product stock (Trigger)
+-- Auto-update product stock
 CREATE OR REPLACE TRIGGER trg_auto_update_stock
 AFTER INSERT ON order_items
 FOR EACH ROW
@@ -238,7 +208,7 @@ BEGIN
 END;
 /
 
--- After a failed payment is inserted, mark order back to Pending (triggres)
+-- After a failed payment is inserted, mark order back to Pending
 CREATE OR REPLACE TRIGGER trg_failed_payment
 AFTER INSERT ON payments
 FOR EACH ROW
@@ -250,7 +220,7 @@ BEGIN
 END;
 /
 
--- Before inserting a seller, check for duplicate email (trigger)
+-- Before inserting a seller, check for duplicate email
 CREATE OR REPLACE TRIGGER trg_prevent_duplicate_seller
 BEFORE INSERT ON sellers
 FOR EACH ROW
