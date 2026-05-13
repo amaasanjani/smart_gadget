@@ -27,20 +27,20 @@ BEGIN
     VALUES (p_product_id, p_seller_id, p_name, p_category, p_price, p_stock, p_description);
 
     COMMIT;
-    DBMS_OUTPUT.PUT_LINE('✅ Product added: ' || p_name || ' (ID: ' || p_product_id || ')');
+    DBMS_OUTPUT.PUT_LINE(' Product added: ' || p_name || ' (ID: ' || p_product_id || ')');
 
 EXCEPTION
     WHEN e_invalid_seller THEN
-        DBMS_OUTPUT.PUT_LINE('❌ ERROR: Seller ID ' || p_seller_id || ' does not exist.');
+        DBMS_OUTPUT.PUT_LINE(' ERROR: Seller ID ' || p_seller_id || ' does not exist.');
         RAISE;
     WHEN e_not_verified THEN
-        DBMS_OUTPUT.PUT_LINE('❌ ERROR: Seller not verified. Cannot add products.');
+        DBMS_OUTPUT.PUT_LINE(' ERROR: Seller not verified. Cannot add products.');
         RAISE;
     WHEN VALUE_ERROR THEN
-        DBMS_OUTPUT.PUT_LINE('❌ ERROR: Invalid data type provided.');
+        DBMS_OUTPUT.PUT_LINE(' ERROR: Invalid data type provided.');
         RAISE;
     WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('❌ ERROR: ' || SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(' ERROR: ' || SQLERRM);
         ROLLBACK;
         RAISE;
 END add_new_product;
@@ -72,16 +72,16 @@ BEGIN
 
     p_status := 'Completed';
     COMMIT;
-    DBMS_OUTPUT.PUT_LINE('✅ Payment processed: Rs. ' || v_amount || ' via ' || p_method);
+    DBMS_OUTPUT.PUT_LINE(' Payment processed: Rs. ' || v_amount || ' via ' || p_method);
 
 EXCEPTION
     WHEN e_order_missing THEN
         p_status := 'Failed';
-        DBMS_OUTPUT.PUT_LINE('❌ Order ' || p_order_id || ' not found.');
+        DBMS_OUTPUT.PUT_LINE(' Order ' || p_order_id || ' not found.');
         RAISE;
     WHEN OTHERS THEN
         p_status := 'Failed';
-        DBMS_OUTPUT.PUT_LINE('❌ Payment error: ' || SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(' Payment error: ' || SQLERRM);
         ROLLBACK;
         RAISE;
 END process_payment;
@@ -127,17 +127,17 @@ BEGIN
     VALUES (v_delivery_id, p_order_id, 'Pending');
 
     COMMIT;
-    DBMS_OUTPUT.PUT_LINE('✅ Order #' || p_order_id || ' placed. Total: Rs. ' || v_total);
+    DBMS_OUTPUT.PUT_LINE(' Order #' || p_order_id || ' placed. Total: Rs. ' || v_total);
 
 EXCEPTION
     WHEN e_out_of_stock THEN
-        DBMS_OUTPUT.PUT_LINE('❌ Product ' || p_product_id || ' is out of stock! Available: ' || v_stock);
+        DBMS_OUTPUT.PUT_LINE(' Product ' || p_product_id || ' is out of stock! Available: ' || v_stock);
         RAISE;
     WHEN NO_DATA_FOUND THEN
-        DBMS_OUTPUT.PUT_LINE('❌ Product not found.');
+        DBMS_OUTPUT.PUT_LINE(' Product not found.');
         RAISE;
     WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('❌ Order error: ' || SQLERRM);
+        DBMS_OUTPUT.PUT_LINE(' Order error: ' || SQLERRM);
         ROLLBACK;
         RAISE;
 END place_order;
@@ -204,7 +204,7 @@ BEGIN
         sold = sold + :NEW.quantity
     WHERE product_id = :NEW.product_id;
 
-    DBMS_OUTPUT.PUT_LINE('📦 Stock updated for product ' || :NEW.product_id);
+    DBMS_OUTPUT.PUT_LINE(' Stock updated for product ' || :NEW.product_id);
 END;
 /
 
@@ -216,7 +216,7 @@ WHEN (NEW.payment_status = 'Failed')
 BEGIN
     -- Revert order to Pending if payment failed
     UPDATE orders SET status = 'Pending' WHERE order_id = :NEW.order_id;
-    DBMS_OUTPUT.PUT_LINE('⚠️ TRIGGER: Payment failed for order ' || :NEW.order_id || '. Order reset to Pending.');
+    DBMS_OUTPUT.PUT_LINE(' TRIGGER: Payment failed for order ' || :NEW.order_id || '. Order reset to Pending.');
 END;
 /
 
@@ -246,7 +246,7 @@ DECLARE
     v_product c_top_products%ROWTYPE;
     v_rank    NUMBER := 0;
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('=== TOP SELLING PRODUCTS ===');
+    DBMS_OUTPUT.PUT_LINE(' TOP SELLING PRODUCTS ');
     OPEN c_top_products;
     LOOP
         FETCH c_top_products INTO v_product;
